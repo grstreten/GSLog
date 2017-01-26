@@ -23,6 +23,7 @@ public class GSLog: NSObject {
     ///Enable or disable saving logs to device (existing logs will still be visible and logs will still be printed into the console)
     var loggingEnabled = true
     var emojiful = true
+    static let numberOfTouches = 2
     
     //Primary function
     @discardableResult init(_ text: String?, _ level: logLevel? = .notice) {
@@ -102,7 +103,7 @@ public class GSLog: NSObject {
     class func setupLog(OntoViewController:UIViewController) {
         //Set up a gesture recogniser and add it to the view parameter
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(GSLog.openLog))
-        recognizer.numberOfTouchesRequired = 3
+        recognizer.numberOfTouchesRequired = numberOfTouches
         OntoViewController.view.addGestureRecognizer(recognizer)
     }
     
@@ -130,7 +131,7 @@ public class GSLog: NSObject {
         
         //Set up a recogniser to close the textView
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(GSLog.closeLog))
-        recognizer.numberOfTouchesRequired = 3
+        recognizer.numberOfTouchesRequired = numberOfTouches
         textView.addGestureRecognizer(recognizer)
         
         //Scroll to the bottom and set misc values
