@@ -141,6 +141,16 @@ public class GSLog: NSObject {
         
         //Add the subview to be above other views
         UIApplication.shared.keyWindow!.addSubview(textView)
+        
+        //Set up recogniser to share gesture
+        let tap = UITapGestureRecognizer(target: textView, action: #selector(GSLog.shareLogs(logs: logText)))
+        tap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tap)
+    }
+    
+   class func shareLogs(logs:String) {
+            let vc = UIActivityViewController(activityItems: [logs], applicationActivities: [])
+            present(vc, animated: true)
     }
     
     ///Manually close the log (bypassing the need for a 3 finger tap from the user)
