@@ -8,7 +8,7 @@ A logging class built out of a need to view logs on-the-go
 ##Usage
 Simply drop **GSLog.swift** into your project and replace `NSLog()` with `GSLog()`. Then, add `GSLog.setupLog(OntoViewController: self)` into the `viewDidLoad` function of the View Controller(s) you would like to view logs on. To add it to all view controllers, I would suggest subclassing UIViewController and adding it into `viewDidLoad` there.
 
-In order to view logs on device, tap anywhere on the screen with three fingers to show/hide the scrollable log.
+In order to view logs on device, tap anywhere on the screen with three fingers to show/hide the scrollable log. In addition, you can double tap with the log open to share the log.
 
 ###Standard log
 Swift function:
@@ -38,3 +38,7 @@ There are three logging levels built into GSLog, each of which will either show 
 * 💥 error
 
 Each of these are accessible by passing `.{levelname}` as the second parameter in a `GSLog()` call
+
+##Contributers
+* by [George Streten](https://github.com/grstreten)
+* with contribution from [George Taylor](https://github.com/georgepstaylor)
