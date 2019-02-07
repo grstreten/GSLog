@@ -28,7 +28,7 @@ public class GSLog: NSObject {
     //Primary function
     @discardableResult init(_ text: String?, _ level: logLevel? = .notice) {
         super.init()
-
+        
         //Allow for the use of other functions in the class
         if text != nil && loggingEnabled {
             //Get UserDefaults - this is where we store the log
@@ -91,8 +91,38 @@ public class GSLog: NSObject {
         }
     }
     
+    class func appStarted(silent:Bool){
+        //Get UserDefaults - this is where we store the log
+        let defaults = UserDefaults.standard
+        
+        //Generate the text to log
+        let logText =   """
+                        \n==== APP STARTED ====
+                        Bundle Identifier: \(Bundle.main.bundleIdentifier!)
+                        App Version: \(Bundle.main.infoDictionary!["CFBundleShortVersionString"]!)
+                        Build Number: \(Bundle.main.infoDictionary!["CFBundleVersion"]!)
+                        Device: \(UIDevice.current.model)
+                        iOS Version: \(UIDevice.current.systemVersion)\n
+                        """
+
+        
+        //Add the log to UserDefaults, by storing it in an array (and initialising if needed)
+        if defaults.array(forKey: "log") != nil{
+            var array = defaults.array(forKey: "log")
+            array?.append(logText)
+            defaults.set(array, forKey: "log")
+        } else {
+            let array = [logText]
+            defaults.set(array, forKey: "log")
+        }
+        
+        if !silent{
+            NSLog(logText)
+        }
+    }
+    
     /**
-     Set up the log to appear on detection of a 3 finger tap from the user
+     Set up the log to appear on detection of a X finger tap from the user
      
      - parameters:
      - OntoView: The UIViewController over which the log should appear
@@ -108,8 +138,8 @@ public class GSLog: NSObject {
     }
     
     ///Manually open the log (bypassing the need for a 3 finger tap from the user)
-    class func openLog() {
-        GSLog("3 finger tap recognised - opening log")
+    @objc class func openLog() {
+        GSLog("\(numberOfTouches) finger tap recognised - opening log")
         
         //Set up a textView to display the log
         let textView = UITextView()
@@ -126,7 +156,7 @@ public class GSLog: NSObject {
         
         //Set up the textView UI
         textView.isEditable = false
-        textView.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.85)
+        textView.backgroundColor = UIColor.init(displayP3Red: 0, green: 0, blue: 0, alpha: 0.85)
         textView.textColor = UIColor.white
         
         //Set up a recogniser to close the textView
@@ -141,20 +171,10 @@ public class GSLog: NSObject {
         
         //Add the subview to be above other views
         UIApplication.shared.keyWindow!.addSubview(textView)
-        
-        //Set up recogniser to share gesture
-        let tap = UITapGestureRecognizer(target: textView, action: #selector(GSLog.shareLogs(logs: logText)))
-        tap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(tap)
-    }
-    
-   class func shareLogs(logs:String) {
-            let vc = UIActivityViewController(activityItems: [logs], applicationActivities: [])
-            present(vc, animated: true)
     }
     
     ///Manually close the log (bypassing the need for a 3 finger tap from the user)
-    class func closeLog() {
+    @objc class func closeLog() {
         //Find the textView and remove it from the superview
         if let viewWithTag = UIApplication.shared.keyWindow!.viewWithTag(109) {
             viewWithTag.removeFromSuperview()
