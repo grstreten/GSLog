@@ -8,6 +8,8 @@ A logging class built out of a need to view logs on-the-go
 ## Usage
 Simply drop **GSLog.swift** into your project and replace `NSLog()` with `GSLog()`. Then, add `GSLog.setupLog(OntoViewController: self)` into the `viewDidLoad` function of the View Controller(s) you would like to view logs on. To add it to all view controllers, I would suggest subclassing UIViewController and adding it into `viewDidLoad` there.
 
+If you wish, you can also call `GSLog.appStarted(silent: BOOL)` in your AppDelegate to log device/app information, and show in the log when your app launches.
+
 In order to view logs on device, tap anywhere on the screen with three fingers to show/hide the scrollable log. In addition, you can double tap with the log open to share the log.
 
 ### Standard log
